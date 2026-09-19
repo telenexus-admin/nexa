@@ -47,7 +47,8 @@ export class HmacBillingGateway implements BillingGateway {
     method: "GET" | "POST",
     path: string,
     tenantId: string,
-    body?: Record<string, unknown>
+    body?: Record<string, unknown>,
+    requestId = crypto.randomUUID()
   ): Promise<T> {
     const timestamp = Math.floor(Date.now() / 1000);
     const bodyObject = body ?? {};
@@ -57,6 +58,7 @@ export class HmacBillingGateway implements BillingGateway {
       method,
       path,
       String(tenantId),
+      requestId,
       sha256(bodyText)
     ].join("\n");
 
@@ -78,7 +80,7 @@ export class HmacBillingGateway implements BillingGateway {
           "x-nexa-timestamp": String(timestamp),
           "x-nexa-tenant-id": String(tenantId),
           "x-nexa-signature": signature,
-          "x-request-id": crypto.randomUUID()
+          "x-request-id": requestId
         },
         ...(method === "POST" ? { body: bodyText } : {})
       });
@@ -146,7 +148,8 @@ export class HmacBillingGateway implements BillingGateway {
       "POST",
       `/api/internal/nexa/customer/${encodeURIComponent(customerId)}/reconnect`,
       tenantId,
-      { requestId }
+      { requestId },
+      requestId
     );
   }
 }
