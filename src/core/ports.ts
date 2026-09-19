@@ -20,6 +20,19 @@ export interface AuditStore {
   append(record: AuditRecord): Promise<void>;
 }
 
+export interface IdempotencyStore {
+  /**
+   * Returns false when this key was already claimed.
+   * Used to prevent duplicate webhook/payment/reconnection side effects.
+   */
+  claim(key: string, ttlSeconds: number): Promise<boolean>;
+  release(key: string): Promise<void>;
+}
+
+export interface LockManager {
+  withLock<T>(key: string, ttlSeconds: number, task: () => Promise<T>): Promise<T>;
+}
+
 export interface InteractionStore {
   create(interaction: Interaction): Promise<void>;
   update(interaction: Interaction): Promise<void>;
@@ -85,6 +98,18 @@ export interface RecordingReference {
 
 export interface RecordingArchive {
   register(recording: RecordingReference): Promise<{ recordingId: string }>;
+}
+
+export interface TranscriptReference {
+  interactionId: string;
+  provider?: string;
+  providerTranscriptId?: string;
+  text?: string;
+  language?: string;
+}
+
+export interface TranscriptArchive {
+  register(transcript: TranscriptReference): Promise<{ transcriptId: string }>;
 }
 
 export interface EscalationTarget {
