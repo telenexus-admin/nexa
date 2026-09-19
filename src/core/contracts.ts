@@ -142,10 +142,40 @@ export interface CustomerServiceSnapshot {
   customerId: string;
   tenantId: string;
   displayName?: string;
-  serviceStatus: "active" | "suspended" | "unknown";
+  phoneNumber?: string;
+  accountNumber?: string;
+  accessMode?: string;
+  serviceStatus: "active" | "suspended" | "pending" | "expired" | "unknown" | string;
+  radiusStatus?: string;
+  radiusSyncStatus?: string;
+  radiusSyncError?: string | null;
+  expiresAt?: string | null;
+  effectiveExpiresAt?: string | null;
+  serviceValid?: boolean;
+  online?: boolean;
   outstandingBalance?: number;
   currency?: string;
   latestPaymentStatus?: "confirmed" | "pending" | "missing" | "unknown";
+  latestPayment?: Record<string, unknown> | null;
+  plan?: {
+    id?: string | null;
+    name?: string | null;
+    price?: number | null;
+    active?: boolean;
+  };
+  router?: {
+    id?: string;
+    name?: string | null;
+    active?: boolean;
+    wireguardTunnelIp?: string | null;
+  } | null;
+  recentSession?: Record<string, unknown> | null;
+  radiusProbeError?: string | null;
+}
+
+export interface CustomerLookupResult {
+  phoneNumber: string;
+  matches: CustomerServiceSnapshot[];
 }
 
 export interface ReconnectionResult {
