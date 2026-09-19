@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import { config } from "./config.js";
 import { registerHealthRoutes } from "./routes/health.js";
 import { registerChannelRoutes } from "./routes/channels.js";
+import { registerCustomerCareRoutes } from "./routes/customerCare.js";
 
 const app = Fastify({
   logger: {
@@ -11,6 +12,7 @@ const app = Fastify({
 
 await registerHealthRoutes(app);
 await registerChannelRoutes(app);
+await registerCustomerCareRoutes(app);
 
 async function shutdown(signal: string) {
   app.log.info({ signal }, "shutting down");

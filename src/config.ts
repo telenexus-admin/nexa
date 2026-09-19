@@ -9,6 +9,8 @@ const schema = z.object({
 
   BILLING_API_BASE_URL: optionalUrl,
   BILLING_API_TOKEN: z.string().optional(),
+  BILLING_API_SECRET: z.string().optional(),
+  NEXA_OPERATOR_API_TOKEN: z.string().optional(),
 
   VAPI_WEBHOOK_SECRET: z.string().optional(),
   WHATSAPP_VERIFY_TOKEN: z.string().optional(),

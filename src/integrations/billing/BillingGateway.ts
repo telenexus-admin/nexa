@@ -1,4 +1,5 @@
 import type {
+  CustomerLookupResult,
   CustomerServiceSnapshot,
   ReconnectionResult
 } from "../../core/contracts.js";
@@ -10,7 +11,11 @@ import type {
  * Do not give Nexa direct production database access.
  */
 export interface BillingGateway {
-  findCustomerByPhone(phoneNumber: string): Promise<CustomerServiceSnapshot | null>;
+  findCustomersByPhone(phoneNumber: string, tenantId: string): Promise<CustomerLookupResult>;
   getCustomerService(customerId: string, tenantId: string): Promise<CustomerServiceSnapshot>;
-  reconnectCustomer(customerId: string, tenantId: string): Promise<ReconnectionResult>;
+  reconnectCustomer(
+    customerId: string,
+    tenantId: string,
+    requestId?: string
+  ): Promise<ReconnectionResult>;
 }
