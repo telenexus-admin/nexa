@@ -80,6 +80,15 @@ export class CustomerReconnectWorkflow {
       };
     }
 
+    if (!customer) {
+      return {
+        status: "escalate",
+        code: "CUSTOMER_RESOLUTION_FAILED",
+        customerMessage:
+          "I could not resolve the customer account safely. I will escalate this support request."
+      };
+    }
+
     const live = await this.billing.getCustomerService(customer.customerId, input.tenantId);
     customer = live;
 
